@@ -1,0 +1,26 @@
+### Create a new task
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Finish report",
+  "description": "Write the quarterly report",
+  "dueDate": "2026-03-01T12:00:00"
+}
+
+### Get all tasks
+GET http://localhost:8080/api/tasks
+
+### Get a task by ID
+GET http://localhost:8080/api/tasks/2
+
+### Update a task (partial update)
+PUT http://localhost:8080/api/tasks/2
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}
+
+### Delete a task
+DELETE http://localhost:8080/api/tasks/10
