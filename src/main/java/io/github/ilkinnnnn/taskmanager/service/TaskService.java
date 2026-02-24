@@ -4,9 +4,13 @@ package io.github.ilkinnnnn.taskmanager.service;
 import io.github.ilkinnnnn.taskmanager.dto.task.CreateTaskDto;
 import io.github.ilkinnnnn.taskmanager.dto.task.UpdateTaskDto;
 import io.github.ilkinnnnn.taskmanager.entity.Task;
+import io.github.ilkinnnnn.taskmanager.entity.TaskStatus;
 import io.github.ilkinnnnn.taskmanager.exception.task.TaskNotFoundException;
 import io.github.ilkinnnnn.taskmanager.repository.TaskRepo;
 import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +31,14 @@ public class TaskService {
         return taskRepo.save(task);
     }
 
-    public List<Task> getAll() {
-        return taskRepo.findAll();
+
+    public Page<@NonNull Task> getAll(TaskStatus status, Pageable pageable) {
+
+        if (status != null) {
+            return taskRepo.findAllByStatus(status, pageable);
+        }
+
+        return taskRepo.findAll(pageable);
     }
 
     public Task getById(Long id) {
@@ -50,5 +60,11 @@ public class TaskService {
         if(dto.status() != null) task.setStatus(dto.status());
 
         return task;
+    }
+
+    public Task patchStatus(Long id, TaskStatus status) {
+        Task task = taskRepo.findById(id).orElseThrow(() ->new TaskNotFoundException(id));
+        task.setStatus(status);
+        return taskRepo.save(task);
     }
 }
