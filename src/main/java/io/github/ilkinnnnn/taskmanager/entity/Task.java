@@ -2,29 +2,32 @@ package io.github.ilkinnnnn.taskmanager.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor()
 @Entity
+@NamedEntityGraph(
+        name = "task.withAttachments",
+        attributeNodes = @NamedAttributeNode("attachments")
+)
 public class Task {
     @Id
     @GeneratedValue
     private Long id;
 
     @Setter
-    @Column(nullable = false)
-    @Size(min = 3, max = 120)
+    @Column(nullable = false, length = 120)
     private String title;
 
     @Setter
-    @Size(max = 500)
     @Column(length = 500)
     private String description;
 
@@ -40,6 +43,11 @@ public class Task {
 
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attachment> attachments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @PrePersist
     public void onCreate() {

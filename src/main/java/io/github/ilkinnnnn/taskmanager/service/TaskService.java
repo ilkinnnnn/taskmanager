@@ -1,57 +1,62 @@
 package io.github.ilkinnnnn.taskmanager.service;
 
 
+import io.github.ilkinnnnn.taskmanager.dto.PageDto;
 import io.github.ilkinnnnn.taskmanager.dto.task.CreateTaskDto;
+import io.github.ilkinnnnn.taskmanager.dto.task.TaskDto;
+import io.github.ilkinnnnn.taskmanager.dto.task.TaskWithAttachmentsDto;
 import io.github.ilkinnnnn.taskmanager.dto.task.UpdateTaskDto;
 import io.github.ilkinnnnn.taskmanager.entity.Task;
 import io.github.ilkinnnnn.taskmanager.entity.TaskStatus;
 import io.github.ilkinnnnn.taskmanager.exception.task.TaskNotFoundException;
 import io.github.ilkinnnnn.taskmanager.repository.TaskRepo;
+import io.github.ilkinnnnn.taskmanager.service.mapper.TaskMapper;
 import jakarta.transaction.Transactional;
-import org.jspecify.annotations.NonNull;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@AllArgsConstructor
 public class TaskService {
-    private final TaskRepo taskRepo;
+    private TaskRepo taskRepo;
 
-    public TaskService(TaskRepo taskRepo) {
-        this.taskRepo = taskRepo;
-    }
-
-    public Task create(CreateTaskDto dto) {
+    public TaskDto create(CreateTaskDto dto) {
         Task task = new Task();
         task.setTitle(dto.title());
         task.setDescription(dto.description());
         task.setDueDate(dto.dueDate());
-        return taskRepo.save(task);
+        return TaskMapper.toDto(taskRepo.save(task));
     }
 
 
-    public Page<@NonNull Task> getAll(TaskStatus status, Pageable pageable) {
+    public PageDto<TaskDto> getAll(TaskStatus status, Pageable pageable) {
+        Page<Task> result;
 
         if (status != null) {
-            return taskRepo.findAllByStatus(status, pageable);
+            result = taskRepo.findAllByStatus(status, pageable);
+        } else {
+            result = taskRepo.findAll(pageable);
         }
 
-        return taskRepo.findAll(pageable);
+        return new PageDto<>(result.map(TaskMapper::toDto));
+
     }
 
-    public Task getById(Long id) {
-        return taskRepo.findById(id).orElseThrow(() ->new TaskNotFoundException(id));
+    public TaskWithAttachmentsDto getById(Long id) {
+        Task task = taskRepo.findWithAttachmentsById(id).orElseThrow(() ->new TaskNotFoundException(id));
+        return TaskMapper.toDtoWithAttachments(task);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         Task task = taskRepo.findById(id).orElseThrow(() ->new TaskNotFoundException(id));
         taskRepo.delete(task);
     }
 
     @Transactional
-    public Task update(Long id, UpdateTaskDto dto) {
+    public TaskDto update(Long id, UpdateTaskDto dto) {
         Task task = taskRepo.findById(id).orElseThrow(() ->new TaskNotFoundException(id));
 
         if(dto.title() != null) task.setTitle(dto.title());
@@ -59,12 +64,12 @@ public class TaskService {
         if(dto.dueDate() != null) task.setDueDate(dto.dueDate());
         if(dto.status() != null) task.setStatus(dto.status());
 
-        return task;
+        return TaskMapper.toDto(task);
     }
 
-    public Task patchStatus(Long id, TaskStatus status) {
+    public TaskDto patchStatus(Long id, TaskStatus status) {
         Task task = taskRepo.findById(id).orElseThrow(() ->new TaskNotFoundException(id));
         task.setStatus(status);
-        return taskRepo.save(task);
+        return TaskMapper.toDto(taskRepo.save(task));
     }
 }
