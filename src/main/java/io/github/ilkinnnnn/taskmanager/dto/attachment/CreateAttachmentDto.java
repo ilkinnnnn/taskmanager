@@ -1,6 +1,6 @@
 package io.github.ilkinnnnn.taskmanager.dto.attachment;
 
-import io.github.ilkinnnnn.taskmanager.entity.AttachmentFileType;
+import io.github.ilkinnnnn.taskmanager.model.enums.AttachmentFileType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

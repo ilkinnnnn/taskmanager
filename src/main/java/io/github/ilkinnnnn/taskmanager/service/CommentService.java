@@ -4,13 +4,13 @@ import io.github.ilkinnnnn.taskmanager.dto.PageDto;
 import io.github.ilkinnnnn.taskmanager.dto.comment.CommentDto;
 import io.github.ilkinnnnn.taskmanager.dto.comment.CreateCommentDto;
 import io.github.ilkinnnnn.taskmanager.dto.comment.UpdateCommentDto;
-import io.github.ilkinnnnn.taskmanager.entity.Comment;
-import io.github.ilkinnnnn.taskmanager.entity.Task;
+import io.github.ilkinnnnn.taskmanager.model.Comment;
+import io.github.ilkinnnnn.taskmanager.model.Task;
 import io.github.ilkinnnnn.taskmanager.exception.NotFoundException;
 import io.github.ilkinnnnn.taskmanager.exception.task.TaskNotFoundException;
 import io.github.ilkinnnnn.taskmanager.repository.CommentRepo;
 import io.github.ilkinnnnn.taskmanager.repository.TaskRepo;
-import io.github.ilkinnnnn.taskmanager.service.mapper.CommentMapper;
+import io.github.ilkinnnnn.taskmanager.mapper.CommentMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class CommentService {
     private CommentRepo commentRepo;
     private TaskRepo taskRepo;
+    private CommentMapper commentMapper;
 
     @Transactional
     public CommentDto create(CreateCommentDto dto) {
@@ -33,7 +34,7 @@ public class CommentService {
         comment.setComment(dto.comment());
         comment.setAuthor(dto.author());
         comment.setTask(parent);
-        return CommentMapper.toDto(commentRepo.save(comment));
+        return commentMapper.toDto(commentRepo.save(comment));
     }
 
     public PageDto<CommentDto> getAll(Long taskId, Pageable pageable) {
@@ -45,12 +46,12 @@ public class CommentService {
             result = commentRepo.findAll(pageable);
         }
 
-        return new PageDto<>(result.map(CommentMapper::toDto));
+        return new PageDto<>(result.map(commentMapper::toDto));
     }
 
     public CommentDto getById(Long id) {
         Comment comment = commentRepo.findById(id).orElseThrow(NotFoundException::new);
-        return CommentMapper.toDto(comment);
+        return commentMapper.toDto(comment);
     }
 
     @Transactional
@@ -60,7 +61,7 @@ public class CommentService {
         if (dto.comment() != null) comment.setComment(dto.comment());
         if (dto.author() != null) comment.setAuthor(dto.author());
 
-        return CommentMapper.toDto(comment);
+        return commentMapper.toDto(comment);
     }
 
     @Transactional

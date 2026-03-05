@@ -1,8 +1,8 @@
 package io.github.ilkinnnnn.taskmanager.repository;
 
 
-import io.github.ilkinnnnn.taskmanager.entity.Task;
-import io.github.ilkinnnnn.taskmanager.entity.TaskStatus;
+import io.github.ilkinnnnn.taskmanager.model.Task;
+import io.github.ilkinnnnn.taskmanager.model.enums.TaskStatus;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

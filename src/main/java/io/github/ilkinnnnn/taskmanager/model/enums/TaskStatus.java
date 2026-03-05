@@ -1,4 +1,4 @@
-package io.github.ilkinnnnn.taskmanager.entity;
+package io.github.ilkinnnnn.taskmanager.model.enums;
 
 public enum TaskStatus {
     NEW,

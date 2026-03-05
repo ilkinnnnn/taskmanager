@@ -1,7 +1,7 @@
 package io.github.ilkinnnnn.taskmanager.dto.task;
 
 import io.github.ilkinnnnn.taskmanager.dto.attachment.AttachmentWithoutTaskIdDto;
-import io.github.ilkinnnnn.taskmanager.entity.TaskStatus;
+import io.github.ilkinnnnn.taskmanager.model.enums.TaskStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

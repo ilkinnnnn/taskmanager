@@ -5,7 +5,7 @@ import io.github.ilkinnnnn.taskmanager.dto.task.CreateTaskDto;
 import io.github.ilkinnnnn.taskmanager.dto.task.TaskDto;
 import io.github.ilkinnnnn.taskmanager.dto.task.TaskWithAttachmentsDto;
 import io.github.ilkinnnnn.taskmanager.dto.task.UpdateTaskDto;
-import io.github.ilkinnnnn.taskmanager.entity.TaskStatus;
+import io.github.ilkinnnnn.taskmanager.model.enums.TaskStatus;
 import io.github.ilkinnnnn.taskmanager.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;

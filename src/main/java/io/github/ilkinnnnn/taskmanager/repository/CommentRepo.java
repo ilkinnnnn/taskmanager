@@ -1,6 +1,6 @@
 package io.github.ilkinnnnn.taskmanager.repository;
 
-import io.github.ilkinnnnn.taskmanager.entity.Comment;
+import io.github.ilkinnnnn.taskmanager.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

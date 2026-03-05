@@ -1,6 +1,7 @@
-package io.github.ilkinnnnn.taskmanager.entity;
+package io.github.ilkinnnnn.taskmanager.model;
 
 
+import io.github.ilkinnnnn.taskmanager.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

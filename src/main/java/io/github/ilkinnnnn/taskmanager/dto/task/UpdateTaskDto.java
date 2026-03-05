@@ -1,6 +1,6 @@
 package io.github.ilkinnnnn.taskmanager.dto.task;
 
-import io.github.ilkinnnnn.taskmanager.entity.TaskStatus;
+import io.github.ilkinnnnn.taskmanager.model.enums.TaskStatus;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;

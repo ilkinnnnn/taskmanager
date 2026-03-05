@@ -1,6 +1,6 @@
 package io.github.ilkinnnnn.taskmanager.repository;
 
-import io.github.ilkinnnnn.taskmanager.entity.Attachment;
+import io.github.ilkinnnnn.taskmanager.model.Attachment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

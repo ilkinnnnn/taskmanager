@@ -4,13 +4,13 @@ import io.github.ilkinnnnn.taskmanager.dto.PageDto;
 import io.github.ilkinnnnn.taskmanager.dto.attachment.AttachmentDto;
 import io.github.ilkinnnnn.taskmanager.dto.attachment.CreateAttachmentDto;
 import io.github.ilkinnnnn.taskmanager.dto.attachment.UpdateAttachmentDto;
-import io.github.ilkinnnnn.taskmanager.entity.Attachment;
-import io.github.ilkinnnnn.taskmanager.entity.Task;
+import io.github.ilkinnnnn.taskmanager.model.Attachment;
+import io.github.ilkinnnnn.taskmanager.model.Task;
 import io.github.ilkinnnnn.taskmanager.exception.NotFoundException;
 import io.github.ilkinnnnn.taskmanager.exception.task.TaskNotFoundException;
 import io.github.ilkinnnnn.taskmanager.repository.AttachmentRepo;
 import io.github.ilkinnnnn.taskmanager.repository.TaskRepo;
-import io.github.ilkinnnnn.taskmanager.service.mapper.AttachmentMapper;
+import io.github.ilkinnnnn.taskmanager.mapper.AttachmentMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class AttachmentService {
     private AttachmentRepo attachmentRepo;
     private TaskRepo taskRepo;
+    private AttachmentMapper attachmentMapper;
 
     @Transactional
     public AttachmentDto create(CreateAttachmentDto dto) {
@@ -32,7 +33,7 @@ public class AttachmentService {
         attachment.setFileUrl(dto.fileUrl());
         attachment.setFileType(dto.fileType());
         attachment.setTask(parent);
-        return AttachmentMapper.toDto(attachmentRepo.save(attachment));
+        return attachmentMapper.toDto(attachmentRepo.save(attachment));
     }
 
     public PageDto<AttachmentDto> getAll(Long taskId, Pageable pageable) {
@@ -44,12 +45,12 @@ public class AttachmentService {
             result = attachmentRepo.findAll(pageable);
         }
 
-        return new PageDto<>(result.map(AttachmentMapper::toDto));
+        return new PageDto<>(result.map(attachmentMapper::toDto));
     }
 
     public AttachmentDto getById(Long id) {
         Attachment attachment = attachmentRepo.findById(id).orElseThrow(NotFoundException::new);
-        return AttachmentMapper.toDto(attachment);
+        return attachmentMapper.toDto(attachment);
     }
 
     @Transactional
@@ -60,7 +61,7 @@ public class AttachmentService {
         if (dto.fileUrl() != null) attachment.setFileUrl(dto.fileUrl());
         if (dto.fileType() != null) attachment.setFileType(dto.fileType());
 
-        return AttachmentMapper.toDto(attachment);
+        return attachmentMapper.toDto(attachment);
     }
 
     @Transactional
